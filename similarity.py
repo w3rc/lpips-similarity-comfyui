@@ -30,10 +30,21 @@ class LPIPSSimilarityNode:
     CATEGORY = "Similarity"
 
     def _to_tensor(self, image):
-        # IMAGE in ComfyUI = [B, H, W, C] in range 0..1
-        image = torch.from_numpy(image).permute(0, 3, 1, 2)
-        image = image * 2.0 - 1.0  # normalize to [-1, 1]
-        return image.to(self.device)
+        # IMAGE may be numpy or torch tensor depending on pipeline
+        if isinstance(image, torch.Tensor):
+            img = image
+        else:
+            img = torch.from_numpy(image)
+    
+        # ComfyUI IMAGE format: [B, H, W, C], range 0..1
+        if img.ndim == 4:
+            img = img.permute(0, 3, 1, 2)
+        elif img.ndim == 3:
+            img = img.permute(2, 0, 1).unsqueeze(0)
+    
+        img = img * 2.0 - 1.0  # normalize to [-1, 1]
+        return img.to(self.device).float()
+
 
     def compute(self, input_image, reference_image_1, reference_image_2, reference_image_3):
         with torch.no_grad():
