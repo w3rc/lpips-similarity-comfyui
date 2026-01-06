@@ -24,7 +24,7 @@ class LPIPSSimilarityNode:
             }
         }
 
-    RETURN_TYPES = ("FLOAT", "FLOAT", "FLOAT", "INT")
+    RETURN_TYPES = ("STRING", "STRING", "STRING", "INT")
     RETURN_NAMES = ("score_ref1", "score_ref2", "score_ref3", "best_match_index")
     FUNCTION = "compute"
     CATEGORY = "Similarity"
@@ -60,7 +60,11 @@ class LPIPSSimilarityNode:
             scores = [s1, s2, s3]
             best_idx = int(np.argmin(scores))  # lower = more similar
 
-        return (s1, s2, s3, best_idx)
+        s1_str = f"{s1:.4f}"
+        s2_str = f"{s2:.4f}"
+        s3_str = f"{s3:.4f}"
+        
+        return (s1_str, s2_str, s3_str, best_idx)
 
 
 NODE_CLASS_MAPPINGS = {
