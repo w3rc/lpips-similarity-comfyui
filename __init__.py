@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from similarity import LPIPSSimilarityNode
+from .similarity import LPIPSSimilarityNode
 
 NODE_CLASS_MAPPINGS = {
     "GetSimilarity": LPIPSSimilarityNode
